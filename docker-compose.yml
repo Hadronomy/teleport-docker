@@ -1,0 +1,26 @@
+version: "3.3"
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  data:
+
+services:
+  teleport:
+    container_name: teleport
+    image: "public.ecr.aws/gravitational/teleport:11"
+    command: teleport configure > /etc/teleport/teleport.yaml
+    restart: always
+    stdin_open: true
+    tty: true
+    networks:
+      - proxy
+    ports:
+      - "3023:3023"
+      - "3025:3025"
+      - "3080:3080"
+    volumes:
+      - "./config:/etc/teleport"
+      - "./data:/var/lib/teleport"
